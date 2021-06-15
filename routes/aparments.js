@@ -37,7 +37,8 @@ router.get("/allapartment", async(req, res, next) => {
 
     })
     // filter data on city rooms and county
-router.get("/filter", (req, res, next) => {
+router.get("/filter", async(req, res, next) => {
+    indexes = await Apartment.getIndexes()
     const query_limit = ["city", "rooms", "country"]
     console.log(Object.keys(req.query))
     if (Object.keys(req.query) in query_limit) {

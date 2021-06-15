@@ -41,10 +41,10 @@ const apartmentSchema = new Schema({
         type: Schema.Types.Date,
         default: Date.now
     }
-}, { versionKey: false })
+}, { versionKey: false }, { autoIndex: true })
 apartmentSchema.index({ rooms: 1, type: -1 })
 apartmentSchema.index({ city: 1, type: -1 })
-apartmentSchema.index({ city: 1, type: -1 })
+apartmentSchema.index({ country: 1, type: -1 })
 
 class Apartment {
     getFullAddress() {

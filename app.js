@@ -11,7 +11,7 @@ require('./auth/auth');
 require('dotenv').config()
     // Mongodb connection
 const mongoose = require('mongoose')
-mongoose.connect(process.env.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true, autoIndex: false })
+mongoose.connect(process.env.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 mongoose.connection.on('error', error => console.log(error));
 mongoose.Promise = global.Promise;
 
