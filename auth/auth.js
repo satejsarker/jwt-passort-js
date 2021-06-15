@@ -3,7 +3,12 @@ const passport = require('passport')
 const localStrategy = require('passport-local').Strategy
 const JWTstrategy = require('passport-jwt').Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
+require('dotenv').config()
 
+/*
+ *sign up module 
+ * singup if no user is present with same email address
+ */
 passport.use(
     'signup',
     new localStrategy({
@@ -26,6 +31,10 @@ passport.use(
     )
 );
 
+/*
+ * login module
+ * generate token againest sucessfull login
+ */
 passport.use(
     'login',
     new localStrategy({
@@ -54,9 +63,12 @@ passport.use(
     )
 );
 
+/*
+ * token validator for routes
+ */
 passport.use(
     new JWTstrategy({
-            secretOrKey: 'TOP_SECRET',
+            secretOrKey: process.env.TOKEN_SECRET,
             jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken('secret_token')
         },
         async(token, done) => {

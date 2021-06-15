@@ -5,7 +5,9 @@ var logger = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
 const passport = require('passport');
+// authentication for the API 
 require('./auth/auth');
+// environment variable
 require('dotenv').config()
     // Mongodb connection
 const mongoose = require('mongoose')
@@ -14,7 +16,7 @@ mongoose.connection.on('error', error => console.log(error));
 mongoose.Promise = global.Promise;
 
 // routers for the api
-var indexRouter = require('./routes/index');
+var apartmentsRoute = require('./routes/aparments');
 var usersRouter = require('./routes/users');
 
 var app = express();
@@ -23,15 +25,20 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-// app.use(express.static(path.join(__dirname, 'public')));
 app.use(helmet())
 app.use(cors())
+
+app.use('/users', usersRouter);
+app.use('/', passport.authenticate('jwt', { session: false }), apartmentsRoute);
+
+// 404 handel
+app.get("*", (req, res, next) => {
+    return res.status(404).send({
+        "msg": "Api route not found"
+    })
+})
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.json({ error: err });
 });
-app.use('/users', usersRouter);
-app.use('/', passport.authenticate('jwt', { session: false }), indexRouter);
-
-
 module.exports = app;
