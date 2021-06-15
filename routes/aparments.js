@@ -3,6 +3,7 @@ const { route } = require('./users');
 const { ajv } = require("../schema/validation")
 const Apartment = require('../model/apartment_model');
 const { query } = require('express');
+const { alwaysValidSchema } = require('ajv/dist/compile/util');
 const router = express.Router();
 
 /* GET home page. */
@@ -39,16 +40,49 @@ router.get("/allapartment", async(req, res, next) => {
     })
     // filter data on city rooms and county
 router.get("/filter", async(req, res, next) => {
-    console.log(req.query)
-    try {
-        room_wise_data = await Apartment.find(req.query)
-        if (room_wise_data.length == 0) {
+        try {
+            if (req.query.hasOwnProperty('long') && req.query.hasOwnProperty('lat')) {
+                // locaiton wise filter
+                coordinate = [parseFloat(req.query.lat)]
+                delete req.query.lat
+                coordinate.push(parseFloat(req.query.long))
+                delete req.query.long
+                all_query = Object.assign({}, req.query)
+                console.log(all_query)
+                all_query['location'] = {
+                    $near: {
+                        $geometry: {
+                            type: "Point",
+                            coordinates: coordinate
+                        },
+                        $maxDistance: 10,
+                        $minDistance: 0
+                    }
+                }
+                console.log(all_query["location"]['$near'])
+
+                filter_wise_data = await Apartment.find(all_query)
+                return res.json(filter_wise_data)
+            }
+            filter_wise_data = await Apartment.find(req.query)
+            if (filter_wise_data.length == 0) {
+                return res.status(404).json({
+                    message: "filter item not found"
+                })
+            }
+            return res.json(filter_wise_data)
+        } catch (err) {
+            console.log(err)
             return res.status(404).json({
                 message: "filter item not found"
             })
         }
-        return res.json(room_wise_data)
-    } catch (err) {
+    })
+    // Geo location wise search 
+router.get("/filter_by_location", async(req, res, next) => {
+    try {
+
+    } catch (error) {
         return res.status(404).json({
             message: "filter item not found"
         })

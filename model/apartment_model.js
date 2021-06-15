@@ -14,13 +14,13 @@ const apartmentSchema = new Schema({
     user_id: Schema.Types.String,
     location: {
         type: {
-            type: String,
-            enum: ['Point'],
-            default: 'Point'
+            type: String, // Don't do `{ location: { type: String } }`
+            enum: ["Point"], // 'location.type' must be 'Point'
+            default: "Point",
         },
         coordinates: {
             type: [Number],
-            required: true
+            required: true,
         }
     },
     city: {
@@ -45,7 +45,7 @@ const apartmentSchema = new Schema({
 apartmentSchema.index({ rooms: 1, type: -1 })
 apartmentSchema.index({ city: 1, type: -1 })
 apartmentSchema.index({ country: 1, type: -1 })
-
+apartmentSchema.index({ location: "2dsphere" })
 class Apartment {
     getFullAddress() {
         return this.address
