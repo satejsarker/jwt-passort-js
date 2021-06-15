@@ -9,27 +9,24 @@ require('dotenv').config()
  *sign up module 
  * singup if no user is present with same email address
  */
-passport.use(
-    'signup',
-    new localStrategy({
-            usernameField: 'email',
-            passwordField: 'password'
-        },
-        async(email, password, done) => {
-            user_check = await User.findOne({ "email": email })
-            if (user_check) {
-                return done(null, { "msg": `user already existis with ${email}` })
-            }
-            try {
-                const user = await User.create({ email, password });
-
-                return done(null, user, );
-            } catch (error) {
-                done(error);
-            }
+passport.use('register', new localStrategy({
+        usernameField: 'email',
+        passwordField: 'password'
+    },
+    async(email, password, done) => {
+        user_check = await User.findOne({ "email": email })
+        if (user_check) {
+            return done(true, null, { "message": `user already existis with ${email}` })
         }
-    )
-);
+        try {
+            const user = await User.create({ email, password });
+
+            return done(null, user, { "message": "Signup successful" });
+        } catch (error) {
+            done(error);
+        }
+    }
+));
 
 /*
  * login module
