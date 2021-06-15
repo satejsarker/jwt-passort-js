@@ -53,7 +53,6 @@ router.get("/filter", async(req, res, next) => {
             message: "filter item not found"
         })
     }
-    return res.json({})
 })
 
 module.exports = router;
