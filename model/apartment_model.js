@@ -19,7 +19,7 @@ const apartmentSchema = new Schema({
             default: 'Point'
         },
         coordinates: {
-            type: [Schema.Types.Decimal128],
+            type: [Number],
             required: true
         }
     },
@@ -37,12 +37,11 @@ const apartmentSchema = new Schema({
         type: Number,
         required: true
     },
-    create_at: {
+    created_at: {
         type: Schema.Types.Date,
         default: Date.now
     }
-
-})
+}, { versionKey: false })
 apartmentSchema.index({ rooms: 1, type: -1 })
 apartmentSchema.index({ city: 1, type: -1 })
 apartmentSchema.index({ city: 1, type: -1 })
