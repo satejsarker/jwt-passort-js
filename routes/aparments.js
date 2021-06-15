@@ -1,7 +1,8 @@
 const express = require('express');
 const { route } = require('./users');
 const { ajv } = require("../schema/validation")
-const Apartment = require('../model/apartment_model')
+const Apartment = require('../model/apartment_model');
+const { query } = require('express');
 const router = express.Router();
 
 /* GET home page. */
@@ -38,11 +39,19 @@ router.get("/allapartment", async(req, res, next) => {
     })
     // filter data on city rooms and county
 router.get("/filter", async(req, res, next) => {
-    indexes = await Apartment.getIndexes()
-    const query_limit = ["city", "rooms", "country"]
-    console.log(Object.keys(req.query))
-    if (Object.keys(req.query) in query_limit) {
-        console.log("found")
+    console.log(req.query)
+    try {
+        room_wise_data = await Apartment.find(req.query)
+        if (room_wise_data.length == 0) {
+            return res.status(404).json({
+                message: "filter item not found"
+            })
+        }
+        return res.json(room_wise_data)
+    } catch (err) {
+        return res.status(404).json({
+            message: "filter item not found"
+        })
     }
     return res.json({})
 })
