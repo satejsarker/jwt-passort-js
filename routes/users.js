@@ -9,8 +9,8 @@ require('dotenv').config()
 // signup api route
 router.post('/signup',
     async(req, res, next) => {
-        const user_schema = ajv.getSchema("user")
-        if (user_schema(req.body)) {
+        const user_validation = ajv.getSchema("user")
+        if (user_validation(req.body)) {
             passport.authenticate('register', async(err, user, info) => {
                 console.log(err, user, info)
                 if (err) {

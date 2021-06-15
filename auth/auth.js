@@ -16,7 +16,7 @@ passport.use('register', new localStrategy({
     async(email, password, done) => {
         user_check = await User.findOne({ "email": email })
         if (user_check) {
-            return done(true, null, { "message": `user already existis with ${email}` })
+            return done(true, null, null)
         }
         try {
             const user = await User.create({ email, password });

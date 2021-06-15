@@ -19,7 +19,7 @@ const apartmentSchema = new Schema({
             default: 'Point'
         },
         coordinates: {
-            type: [Number],
+            type: [Schema.Types.Decimal128],
             required: true
         }
     },
@@ -34,7 +34,7 @@ const apartmentSchema = new Schema({
     },
 
     rooms: {
-        type: Schema.type.Number,
+        type: Number,
         required: true
     },
     create_at: {
@@ -52,3 +52,5 @@ class Apartment {
         return this.address
     }
 }
+
+module.exports = apartmentModel = mongoose.model('apartments', apartmentSchema)

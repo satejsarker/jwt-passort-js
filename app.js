@@ -33,12 +33,12 @@ app.use('/', passport.authenticate('jwt', { session: false }), apartmentsRoute);
 
 // 404 handel
 app.get("*", (req, res, next) => {
-    return res.status(404).send({
-        "msg": "Api route not found"
+        return res.status(404).send({
+            "msg": "Api route not found"
+        })
     })
-})
-app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.json({ error: err });
-});
+    // app.use(function(err, req, res, next) {
+    //     res.status(err.status || 500);
+    //     res.json({ error: err });
+    // });
 module.exports = app;
