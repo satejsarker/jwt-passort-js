@@ -51,7 +51,7 @@ router.post("/add",async (req, res, next) => {
             // only unique value will be stored
             user.favorites=[...new Set(favorites)]
             user.save()
-            return res.status(301).send()
+            return res.status(201).send()
         } catch (err) {
             return res.status(500).json({
                 message: "item not added "

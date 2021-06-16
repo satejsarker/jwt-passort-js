@@ -12,7 +12,7 @@ router.get('/', (req, res, next) => {
 });
 
 // create apartment
-router.post("/createAparment", async(req, res, next) => {
+router.post("/createaparment", async(req, res, next) => {
     /*
     Apartment will be create with valid schema data  and linked to user
     Schema definition is added fin validation module
@@ -66,7 +66,7 @@ router.get("/filter", async(req, res, next) => {
                             type: "Point",
                             coordinates: coordinate
                         },
-                        $maxDistance: 10,
+                        $maxDistance: 20,
                         $minDistance: 0
                     }
                 }

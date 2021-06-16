@@ -5,6 +5,8 @@ const logger = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
 const passport = require('passport');
+const swaggerUi = require('swagger-ui-express');
+const api_doc=require('./openapi.json');
 // authentication for the API
 require('./auth/auth');
 
@@ -31,9 +33,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(helmet())
 app.use(cors())
-
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(api_doc));
 app.use('/users', usersRouter);
-app.use('/', passport.authenticate('jwt', { session: false }), apartmentsRoute);
+app.use('/apartments', passport.authenticate('jwt', { session: false }), apartmentsRoute);
 app.use('/users/favorite', passport.authenticate('jwt', { session: false }), favoriteRouter);
 
 // 404 handel
@@ -42,8 +44,8 @@ app.get("*", (req, res, next) => {
             "msg": "Api route not found"
         })
     })
-    // app.use(function(err, req, res, next) {
-    //     res.status(err.status || 500);
-    //     res.json({ error: err });
-    // });
+    app.use(function(err, req, res, next) {
+        res.status(err.status || 500);
+        res.json({ error: err });
+    });
 module.exports = app;
