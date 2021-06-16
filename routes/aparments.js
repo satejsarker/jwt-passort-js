@@ -88,4 +88,20 @@ router.get("/filter", async(req, res, next) => {
         }
     })
 
+router.get('/createdapartments',async (req,res,next)=>{
+    /*
+    List all the apartment created by user
+     */
+    console.log({user_id:req.user._id})
+    try{
+        let user_apartments= await Apartment.find({"user_id": req.user._id})
+        return  res.json(user_apartments)
+    }
+    catch (err){
+        console.log(err)
+        return res.status(404).json({
+            message:"no apartment is added by user"
+        })
+    }
+})
 module.exports = router;
