@@ -59,7 +59,6 @@ router.get("/filter", async(req, res, next) => {
                 coordinate.push(parseFloat(req.query.long))
                 delete req.query.long
                 let all_query = Object.assign({}, req.query)
-                console.log(all_query)
                 all_query['location'] = {
                     $near: {
                         $geometry: {
@@ -92,7 +91,6 @@ router.get('/createdapartments',async (req,res,next)=>{
     /*
     List all the apartment created by user
      */
-    console.log({user_id:req.user._id})
     try{
         let user_apartments= await Apartment.find({"user_id": req.user._id})
         return  res.json(user_apartments)

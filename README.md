@@ -28,5 +28,5 @@ retryWrites=true&w=majority
 ### Open api spec will be available on
 >http://localhost:8000/api-docs 
 
-####For unit test run 
+####For test run 
 `npm test`

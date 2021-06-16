@@ -12,7 +12,6 @@ router.get("/list",async (req, res, next) => {
          */
     try{
         let user= await User.findById( req.user._id)
-        console.log(user.favorites)
         let all_apartments= await Apartment.find({'_id':{$in:user.favorites}})
         if (all_apartments.length===0)
            return res.status(404).json({

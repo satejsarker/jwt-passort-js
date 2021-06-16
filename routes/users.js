@@ -16,7 +16,6 @@ router.post('/signup',
         const user_validation = ajv.getSchema("user")
         if (user_validation(req.body)) {
             passport.authenticate('register', async(err, user, info) => {
-                console.log(err, user, info)
                 if (err) {
                     return res.status(409).json({
                         "message": `user already existis with ${req.body.email}`
