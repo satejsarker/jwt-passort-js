@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "test": "mocha --exit"
+    "test": "mocha  --timeout 10000 --exit"
   },
   "dependencies": {
     "ajv": "^8.6.0",
