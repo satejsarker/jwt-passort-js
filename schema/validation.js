@@ -1,6 +1,8 @@
 const Ajv = require('ajv')
 const schema_user = require('./user_schema')
 const schema_apartment = require('./apartment_schema')
+const schema_favorite = require('./favorite_schema')
 const ajv = exports.ajv = new Ajv({ seDefaults: true, allErrors: true })
 ajv.addSchema(schema_user, 'user')
 ajv.addSchema(schema_apartment, 'apartment')
+ajv.addSchema(schema_favorite, 'favorite')

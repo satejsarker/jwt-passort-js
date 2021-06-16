@@ -13,9 +13,12 @@ router.get('/', (req, res, next) => {
 
 // create apartment
 router.post("/createAparment", async(req, res, next) => {
-        const apartment_validation = ajv.getSchema("apartment")
-        valid = apartment_validation(req.body)
-        if (!valid) {
+    /*
+    Apartment will be create with valid schema data  and linked to user
+    Schema definition is added fin validation module
+     */
+    const apartment_validation = ajv.getSchema("apartment")
+        if (!apartment_validation(req.body)) {
             return res.status(400).send()
         }
         req.body["user_id"] = req.user._id
@@ -27,10 +30,13 @@ router.post("/createAparment", async(req, res, next) => {
         })
     })
     // fetch all data
-router.get("/allapartment", async(req, res, next) => {
+router.get("/allapartments", async(req, res, next) => {
+       /*
+       Get all the apartment with out any filter
+        */
         try {
-            all_data = await Apartment.find({})
-            if (all_data.length != 0)
+           let all_data = await Apartment.find({})
+            if (all_data.length !== 0)
                 return res.json(all_data)
             return res.status(404).json({ "message": "no data found" })
         } catch (err) {
@@ -40,14 +46,19 @@ router.get("/allapartment", async(req, res, next) => {
     })
     // filter data on city rooms and county
 router.get("/filter", async(req, res, next) => {
+    /*
+    Apartments can be filter base on city, country, rooms, and location coordinates
+    for location query `lat` and `long` must be provided via request query
+    and every other query will be accepted via req.query
+     */
         try {
             if (req.query.hasOwnProperty('long') && req.query.hasOwnProperty('lat')) {
                 // locaiton wise filter
-                coordinate = [parseFloat(req.query.lat)]
+                let coordinate = [parseFloat(req.query.lat)]
                 delete req.query.lat
                 coordinate.push(parseFloat(req.query.long))
                 delete req.query.long
-                all_query = Object.assign({}, req.query)
+                let all_query = Object.assign({}, req.query)
                 console.log(all_query)
                 all_query['location'] = {
                     $near: {
@@ -59,13 +70,11 @@ router.get("/filter", async(req, res, next) => {
                         $minDistance: 0
                     }
                 }
-                console.log(all_query["location"]['$near'])
-
-                filter_wise_data = await Apartment.find(all_query)
+                let filter_wise_data = await Apartment.find(all_query)
                 return res.json(filter_wise_data)
             }
-            filter_wise_data = await Apartment.find(req.query)
-            if (filter_wise_data.length == 0) {
+            let filter_wise_data = await Apartment.find(req.query)
+            if (filter_wise_data.length === 0) {
                 return res.status(404).json({
                     message: "filter item not found"
                 })
@@ -78,15 +87,5 @@ router.get("/filter", async(req, res, next) => {
             })
         }
     })
-    // Geo location wise search 
-router.get("/filter_by_location", async(req, res, next) => {
-    try {
-
-    } catch (error) {
-        return res.status(404).json({
-            message: "filter item not found"
-        })
-    }
-})
 
 module.exports = router;

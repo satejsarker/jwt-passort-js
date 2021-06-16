@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const passport = require('passport')
 const jwt = require('jsonwebtoken');
 const { ajv } = require("../schema/validation")
@@ -9,6 +9,10 @@ require('dotenv').config()
 // signup api route
 router.post('/signup',
     async(req, res, next) => {
+    /*
+    Create user from email and password
+    email will be checked from database for uniqueness
+     */
         const user_validation = ajv.getSchema("user")
         if (user_validation(req.body)) {
             passport.authenticate('register', async(err, user, info) => {
@@ -29,8 +33,13 @@ router.post('/signup',
 
 );
 
-// Login route 
+// Login route
 router.post('/login', async(req, res, next) => {
+    /*
+    User can login by providing email and password
+    JWT will be provided on successful login
+    token can then used for secure route
+     */
     passport.authenticate('login', async(err, user, info) => {
         try {
             if (err || !user) {
@@ -55,9 +64,5 @@ router.post('/login', async(req, res, next) => {
     })(req, res, next);
 });
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-    res.send('respond with a resource');
-});
 
 module.exports = router;
